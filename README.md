@@ -12,7 +12,6 @@ A modern URL shortener built with React and Supabase.
 ## Tech Stack
 - Frontend: React, Tailwind CSS
 - Backend: Supabase
-- Deployment: [Your hosting platform]
 
 ## Installation
 ```bash
