@@ -1,3 +1,24 @@
+# URL Shortener
+
+A modern URL shortener built with React and Supabase.
+
+## Features
+- Shorten long URLs
+- Custom short URLs
+- QR code generation
+- Click analytics
+- User authentication
+
+## Tech Stack
+- Frontend: React, Tailwind CSS
+- Backend: Supabase
+- Deployment: [Your hosting platform]
+
+## Installation
+```bash
+npm install
+npm run dev
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
