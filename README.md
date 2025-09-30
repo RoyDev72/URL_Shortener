@@ -1,5 +1,3 @@
-# URL Shortener
-
 A modern, full-stack URL shortener built with React and Supabase.
 
 ## Features
