@@ -37,18 +37,23 @@ const Signup = () => {
     profile_pic: null,
   });
 
-  const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === 'profile_pic') {
-      const file = files?.[0] || null;
-      setFormData(prev => ({ ...prev, profile_pic: file }));
-      console.log('Selected file:', file?.name, file?.type, file?.size);
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
-  };
+ const handleInputChange = (e) => {
+  // ✅ Safe destructuring with default object
+  const { name, value, files } = e?.target || {};
+  
+  // ✅ Exit if no name (invalid event)
+  if (!name) return;
+  
+  if (name === 'profile_pic') {
+    const file = files?.[0] || null;
+    setFormData(prev => ({ ...prev, profile_pic: file }));
+    console.log('Selected file:', file?.name, file?.type, file?.size);
+  } else {
+    setFormData(prev => ({ ...prev, [name]: value }));
+  }
+};
 
-  const {loading, error, fn: fnSignup, data} = useFetch(signup, formData);
+   const { loading, error, fn: fnSignup, data } = useFetch(signup); // removed formData here
   const {fetchUser} = UrlState();
 
   useEffect(() => {
@@ -59,29 +64,20 @@ const Signup = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, loading]);
 
-  const handleSignup = async () => {
-    setErrors([]);
+   const handleSignup = async () => {
+    setErrors({}); // was []
     try {
       const schema = Yup.object().shape({
         name: Yup.string().required("Name is required"),
-        email: Yup.string()
-          .email("Invalid email")
-          .required("Email is required"),
-        password: Yup.string()
-          .min(6, "Password must be at least 6 characters")
-          .required("Password is required"),
+        email: Yup.string().email("Invalid email").required("Email is required"),
+        password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
         profile_pic: Yup.mixed().required("Profile picture is required"),
       });
-
-      await schema.validate(formData, {abortEarly: false});
-      await fnSignup();
+      await schema.validate(formData, { abortEarly: false });
+      await fnSignup(formData); // pass formData here
     } catch (e) {
       const newErrors = {};
-
-      e?.inner?.forEach((err) => {
-        newErrors[err.path] = err.message;
-      });
-
+      e?.inner?.forEach(err => { newErrors[err.path] = err.message; });
       setErrors(newErrors);
     }
   };

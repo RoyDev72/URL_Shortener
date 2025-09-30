@@ -41,3 +41,5 @@ out
 .env.staging.local
 .env.development.local
 
+
+.vercel
